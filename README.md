@@ -8,7 +8,7 @@ Add to the gem, install the plugin, configure for which types of posts, categori
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'camaleon_pagenotfound'
+gem 'camaleon-pagenotfound'
 ```
 
 And then execute:
