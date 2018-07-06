@@ -1,0 +1,65 @@
+<script>
+  jQuery(function($){
+    var form = $("#cache_front_form");
+    form.find("#btn-add-path").click(function(){
+      var a = '<div class="input-group"> <input name="cache[paths][]" type="text" class="form-control" value=""> <span class="input-group-addon border_trans"><i class="round_icon fa fa-times text-danger del_path "></i></span> </div>';
+      form.find("#paths").append(a);
+      return false;
+    });
+    form.on("click", ".del_path", function(){
+      $(this).closest(".input-group").remove();
+    });
+    $('#camaleon_pagenotfound_form select').selectpicker();
+  });
+</script>
+
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h4><%= cama_t 'pagenotfound.settings' %></h4>
+  </div>
+
+  <div class="panel-body">
+
+    <div class="alert alert-info">
+      <%== cama_t 'pagenotfound.instructions' %>
+    </div>
+
+    <%= form_tag url_for(action: :save_settings), id: 'camaleon_pagenotfound_form', class: 'validate' do %>
+
+        <div class="form-group">
+          <label><%= cama_t 'pagenotfound.content_types_complete' %></label>
+          <%= select_tag "options[post_types]", options_from_collection_for_select(current_site.post_types.decorate, "id", "the_title", @plugin.get_option('post_types')), class: "form-control select", multiple: true, "data-live-search" => true %>
+        </div>
+
+        <div class="form-group">
+          <label><%= cama_t 'pagenotfound.content_types_list' %></label>
+          <%= select_tag "options[post_type_posts_list]", options_from_collection_for_select(current_site.post_types.decorate, "id", "the_title", @plugin.get_option('post_type_posts_list')), class: "form-control select", multiple: true, "data-live-search" => true %>
+        </div>
+
+        <div class="form-group">
+          <label><%= cama_t 'pagenotfound.categories_list' %></label>
+          <%= select_tag "options[category_list]", options_from_collection_for_select(current_site.the_full_categories.decorate, "id", "the_title", @plugin.get_option('category_list')), class: "form-control select", multiple: true, "data-live-search" => true %>
+        </div>
+
+        <div class="form-group">
+          <label><%= cama_t 'pagenotfound.categories_posts_list' %></label>
+          <%= select_tag "options[category_posts_list]", options_from_collection_for_select(current_site.the_full_categories.decorate, "id", "the_title", @plugin.get_option('category_posts_list')), class: "form-control select", multiple: true, "data-live-search" => true %>
+        </div>
+
+        <div class="form-group">
+          <label><%= cama_t 'pagenotfound.posts_list' %></label>
+          <%= select_tag "options[posts_list]", options_from_collection_for_select(current_site.the_posts.decorate, "id", "the_title", @plugin.get_option('posts_list')), class: "form-control select", multiple: true, "data-live-search" => true %>
+        </div>
+
+        <div class="form-group">
+          <label><%= cama_t 'pagenotfound.tags' %>?</label>
+          <%= check_box_tag "options[tags]", 1, @plugin.get_option('skip_tags'), style: 'display: block;' %>
+        </div>
+
+        <div class="form-group text-right">
+          <%= submit_tag cama_t 'pagenotfound.save', class: 'btn btn-primary' %>
+        </div>
+
+    <% end %>
+  </div>
+</div>

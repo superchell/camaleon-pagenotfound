@@ -1,0 +1,16 @@
+{
+  "title": "Camaleon Pagenotfound",
+  "descr": "",
+  "key": "camaleon_pagenotfound", // must be the name of the folder of your plugin, sample: app/views/plugins/<my_plugin> ==> 'my_plugin'
+  "helpers": [
+    "Plugins::CamaleonPagenotfound::MainHelper"
+  ],
+  "hooks": {
+    "on_active": ["camaleon_pagenotfound_on_active"],
+    "on_inactive": ["camaleon_pagenotfound_on_inactive"],
+    "plugin_options": ["camaleon_pagenotfound_on_plugin_options"],
+    "front_before_load": ["custom_render_not_found"],
+    "on_render_sitemap": ["pagenotfound_customize_sitemap"]
+    //here you can add all your hooks (read documentation)
+  }
+}

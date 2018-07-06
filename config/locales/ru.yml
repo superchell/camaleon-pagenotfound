@@ -1,0 +1,11 @@
+ru:
+  pagenotfound:
+    settings: "Настройки плагина PageNotFound"
+    instructions: "Выберите типы контента (content_type), категории или посты, которые должны отдавать 404 страницу."
+    content_types_complete: "404 для всех страниц типа контента"
+    content_types_list: "404 только для страницы типа контента"
+    categories_list: "404 только для страниц категорий"
+    categories_posts_list: "404 только для страниц постов в категориях"
+    posts_list: "404 для страниц постов"
+    tags: "404 для страниц тэгов"
+    save: "Сохранить"
