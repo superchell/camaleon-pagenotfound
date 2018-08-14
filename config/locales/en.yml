@@ -4,6 +4,7 @@ en:
     instructions: "Select the post_types, categories or posts that should give 404 status."
     content_types_complete: "Content Types to exclude completely"
     content_types_list: "Content Types to exclude (list pages only)"
+    content_type_posts_only: "Content Types Posts to exclude (post pages only)"
     categories_list: "Categories to exclude (list pages only)"
     categories_posts_list: "Category posts to exclude (post pages only)"
     posts_list: "Posts to exclude (post pages only)"

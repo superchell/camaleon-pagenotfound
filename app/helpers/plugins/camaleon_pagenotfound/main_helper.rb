@@ -3,6 +3,7 @@ module Plugins::CamaleonPagenotfound::MainHelper
   PAGENOTFOUND_DEFAULTS = {
     post_types: [],
     post_type_posts_list: [],
+    post_type_posts_only: [],
     category_list: [],
     category_posts_list: [],
     posts_list: [],
@@ -52,9 +53,9 @@ module Plugins::CamaleonPagenotfound::MainHelper
     end
 
     self.render_page_not_found if request.path == "/index.html" ||
-                                  params[:action] == 'post_type' && post_types.include?(params['post_type_slug']) ||
-                                  params[:action] == 'post' && posts.include?(params[:slug]) ||
-                                  params[:action] == 'category' &&  get_pagenotfound_option('category_list').include?(params[:category_id].to_i)
+      params[:action] == 'post_type' && post_types.include?(params['post_type_slug']) ||
+      params[:action] == 'post' && posts.include?(params[:slug]) ||
+      params[:action] == 'category' &&  get_pagenotfound_option('category_list').include?(params[:category_id].to_i)
   end
 
   def pagenotfound_customize_sitemap(args)
@@ -83,29 +84,31 @@ module Plugins::CamaleonPagenotfound::MainHelper
     Rails.cache.fetch("pagenotfound_slugs_#{I18n.locale.to_s}_#{option_key}") do
       res = {}
       case option_key
-        when 'post_types'
-          res[:post_types] = post_type_slugs(ids)
-          res[:posts] = post_slugs(ids)
-          res[:categories] = []
-          ids.each do |post_type_id|
-            res[:categories] += current_site.the_categories(post_type_id).map(&:slug).presence || []
-          end
-        when 'post_type_posts_list'
-          res[:post_types] = post_type_slugs(ids)
-        when 'category_list'
-          res[:categories] = category_slugs(ids)
-        when 'category_posts_list'
-          categories = CamaleonCms::Category.where("id in (#{ids.join(',')})")
-          res[:posts] = []
-          res[:categories] = []
-          categories.each do |category|
-            res[:posts] += category.decorate.the_posts.map{|p| p.slug.translate}.presence || []
-            res[:categories] += category.children.map(&:slug).presence || []
-          end
-        when 'posts_list'
-          res[:posts] = post_slugs(ids)
-        else
-          nil
+      when 'post_types'
+        res[:post_types] = post_type_slugs(ids)
+        res[:posts] = post_slugs(ids)
+        res[:categories] = []
+        ids.each do |post_type_id|
+          res[:categories] += current_site.the_categories(post_type_id).map(&:slug).presence || []
+        end
+      when 'post_type_posts_list'
+        res[:post_types] = post_type_slugs(ids)
+      when 'post_type_posts_only'
+        res[:posts] = post_slugs(ids)
+      when 'category_list'
+        res[:categories] = category_slugs(ids)
+      when 'category_posts_list'
+        categories = CamaleonCms::Category.where("id in (#{ids.join(',')})")
+        res[:posts] = []
+        res[:categories] = []
+        categories.each do |category|
+          res[:posts] += category.decorate.the_posts.map{|p| p.slug.translate}.presence || []
+          res[:categories] += category.children.map(&:slug).presence || []
+        end
+      when 'posts_list'
+        res[:posts] = post_slugs(ids)
+      else
+        nil
       end
       res
     end
