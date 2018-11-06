@@ -60,12 +60,12 @@ module Plugins::CamaleonPagenotfound::MainHelper
 
   def pagenotfound_customize_sitemap(args)
     args[:skip_posttype_ids] += get_pagenotfound_option('post_types')
-    args[:skip_posttype_ids].each do |ptype|
+    args[:skip_posttype_ids] + get_pagenotfound_option('post_type_posts_only').each do |ptype|
       args[:skip_post_ids] += current_site.the_posts(ptype).map(&:id)
       args[:skip_cat_ids] += current_site.the_categories(ptype).map(&:id)
     end
 
-    args[:skip_posttype_ids] += current_plugin.get_option('post_type_posts_list')&.map(&:to_i).presence || []
+    args[:skip_posttype_ids] += get_pagenotfound_option('post_type_posts_list')&.map(&:to_i).presence || []
     args[:skip_cat_ids]      += get_pagenotfound_option('category_list')
     args[:skip_post_ids]      += category_posts_list
     args[:skip_cat_ids]      += category_children
@@ -135,16 +135,20 @@ module Plugins::CamaleonPagenotfound::MainHelper
   def category_posts_list
     posts_ids = []
     ids = get_pagenotfound_option('category_posts_list')
-    categories = CamaleonCms::Category.where("id in (#{ids.join(',')})")
-    categories.each{|category| posts_ids += category.decorate.the_posts.map(&:id).presence || []}
+    if ids.size > 0
+      categories = CamaleonCms::Category.where("id in (#{ids.join(',')})").decorate
+      categories.each{|category| posts_ids += category.the_posts.map(&:id).presence || []}
+    end
     posts_ids
   end
 
   def category_children
     cat_ids = []
     ids = get_pagenotfound_option('category_posts_list')
-    categories = CamaleonCms::Category.where("id in (#{ids.join(',')})")
-    categories.each{|category| cat_ids += category.children.map(&:slug).presence || []}
+    if ids.size > 0
+      categories = CamaleonCms::Category.where("id in (#{ids.join(',')})").decorate
+      categories.each{|category| cat_ids += category.children.map(&:slug).presence || []}
+    end
     cat_ids
   end
 end
